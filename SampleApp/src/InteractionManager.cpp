@@ -124,9 +124,13 @@ void InteractionManager::begin() {
         m_userInterface->printHelpScreen();
 	//m_isMicOn = true;
 	if (m_wakeWordAudioProvider) {
-	  sleep(10);
-	  printf("%d", getAuthState());
+	  //while (m_userInterface->getAuthState() != AuthObserverInterface::State::REFRESHED) {
+	  while (m_userInterface->getConnectionStatus() != avsCommon::sdkInterfaces::ConnectionStatusObserverInterface::Status::CONNECTED) {
+	    usleep(50000);
+    	  }
+	  printf("%d", (int) m_userInterface->getAuthState());
 	  printf("StartStreamigMicrophoneData() 1\n\n\n\n\n");
+	  sleep(2);
           m_micWrapper->startStreamingMicrophoneData();
         }
 

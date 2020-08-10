@@ -407,6 +407,10 @@ public:
     avsCommon::sdkInterfaces::AuthObserverInterface::State getAuthState() {
         return m_authState;
     }
+
+    avsCommon::sdkInterfaces::ConnectionStatusObserverInterface::Status getConnectionStatus() {
+        return m_connectionStatus;
+    }    
 private:
     /**
      * Constructor
