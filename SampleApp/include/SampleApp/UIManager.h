@@ -404,6 +404,9 @@ public:
      */
     void printAudioInjectionFailureMessage();
 
+    avsCommon::sdkInterfaces::AuthObserverInterface::State getAuthState() {
+        return m_authState;
+    }
 private:
     /**
      * Constructor

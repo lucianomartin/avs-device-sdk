@@ -125,7 +125,7 @@ void InteractionManager::begin() {
 	//m_isMicOn = true;
 	if (m_wakeWordAudioProvider) {
 	  sleep(10);
-	  printf("%d", m_authState);
+	  printf("%d", getAuthState());
 	  printf("StartStreamigMicrophoneData() 1\n\n\n\n\n");
           m_micWrapper->startStreamingMicrophoneData();
         }
