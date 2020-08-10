@@ -27,7 +27,7 @@
 #include <SampleApp/CalendarClient.h>
 #include <SampleApp/MeetingClient.h>
 #endif
-
+#include <CBLAuthDelegate/CBLAuthDelegate.h>
 namespace alexaClientSDK {
 namespace sampleApp {
 
