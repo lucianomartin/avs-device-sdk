@@ -172,6 +172,7 @@ void PortAudioMicrophoneWrapper::ReaderThread(PortAudioMicrophoneWrapper *wrappe
     const unsigned period = sizeof(block) / 2 * 1000 / (unsigned)SAMPLE_RATE;
     while (wrapper->m_threadFuture->wait_for(std::chrono::milliseconds(period)) == std::future_status::timeout) {
         wrapper->m_fileStream->read((char*)block, sizeof(block));
+	//printf("blocks: %x %x %x %x\n", block[0], block[1], block[2], block[3]);
         if (wrapper->m_fileStream->fail() || wrapper->m_fileStream->eof()) {
             if (!wrapper->m_eofReached) {
                 ACSDK_LOG(alexaClientSDK::avsCommon::utils::logger::Level::INFO, alexaClientSDK::avsCommon::utils::logger::LogEntry("FileInput", "eofReached"));
@@ -187,6 +188,7 @@ void PortAudioMicrophoneWrapper::ReaderThread(PortAudioMicrophoneWrapper *wrappe
             ACSDK_LOG(alexaClientSDK::avsCommon::utils::logger::Level::INFO, alexaClientSDK::avsCommon::utils::logger::LogEntry("FileInput", "timeElapsedApprox").d("seconds", wrapper->m_samplesRead / (unsigned)SAMPLE_RATE));
         }
         wrapper->m_samplesRead += sizeof(block) / 2;
+	//printf("wrapper->m_samplesRead %d\n",  wrapper->m_samplesRead);
     }
     ACSDK_LOG(alexaClientSDK::avsCommon::utils::logger::Level::INFO, alexaClientSDK::avsCommon::utils::logger::LogEntry("FileInput", "threadShuttingDown"));
 }

@@ -353,6 +353,7 @@ void SensoryKeywordDetector::detectionLoop() {
             audioDataToPush.size(),
             TIMEOUT_FOR_READ_CALLS,
             &didErrorOccur);
+	    //printf("wordsRead %d didErrorOccur %d AudioInputStream::Reader::Error::OVERRUN %d\n", wordsRead, didErrorOccur, AudioInputStream::Reader::Error::OVERRUN);
         if (didErrorOccur) {
             /*
              * Note that this does not include the overrun condition, which the base class handles by instructing the
@@ -397,6 +398,7 @@ void SensoryKeywordDetector::detectionLoop() {
                     // Reached end of buffer without any keyword detections
                     break;
                 case SNSR_RC_OK:
+	            printf("Sensory results OK %d %d %d\n\n\n\n", result, SNSR_RC_STREAM_END, SNSR_RC_OK);
                     break;
                 default:
                     // A different return from the callback function that indicates some sort of error

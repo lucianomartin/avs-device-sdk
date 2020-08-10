@@ -110,11 +110,11 @@ InteractionManager::InteractionManager(
         m_friendlyNameToggle{true},
 #endif
         m_diagnostics{diagnostics} {
-    if (m_wakeWordAudioProvider) {
-        m_micWrapper->startStreamingMicrophoneData();
-    }
+    //if (m_wakeWordAudioProvider) {
+    //    m_micWrapper->startStreamingMicrophoneData();
+    //}
 };
-
+#include <unistd.h>
 void InteractionManager::begin() {
     m_executor.submit([this]() {
         m_userInterface->printWelcomeScreen();
@@ -122,6 +122,14 @@ void InteractionManager::begin() {
             m_userInterface->printAudioInjectionHeader();
         }
         m_userInterface->printHelpScreen();
+	//m_isMicOn = true;
+	if (m_wakeWordAudioProvider) {
+	  sleep(10);
+	  printf("%d", m_authState);
+	  printf("StartStreamigMicrophoneData() 1\n\n\n\n\n");
+          m_micWrapper->startStreamingMicrophoneData();
+        }
+
     });
 }
 
@@ -349,6 +357,7 @@ void InteractionManager::microphoneToggle() {
         } else {
             m_isMicOn = true;
             if (!m_micWrapper->isStreaming() && m_wakeWordAudioProvider) {
+	  	printf("StartStreamigMicrophoneData() 2\n\n");
                 m_micWrapper->startStreamingMicrophoneData();
             }
             m_userInterface->microphoneOn();
@@ -579,6 +588,7 @@ void InteractionManager::onDialogUXStateChanged(DialogUXState state) {
     m_executor.submit([this, state]() {
         if (DialogUXState::LISTENING == state) {
             if (m_isMicOn && !m_micWrapper->isStreaming()) {
+	  	printf("StartStreamigMicrophoneData() 3\n\n");
                 m_micWrapper->startStreamingMicrophoneData();
             }
         } else {
@@ -597,6 +607,7 @@ void InteractionManager::onCallStateChange(CallState state) {
     m_executor.submit([this, state]() {
         if (CallState::CALL_CONNECTED == state) {
             if (!m_micWrapper->isStreaming()) {
+	  	printf("StartStreamigMicrophoneData() 4\n\n");
                 m_micWrapper->startStreamingMicrophoneData();
             }
             m_isCallConnected = true;
@@ -930,6 +941,7 @@ void InteractionManager::clearProtocolTrace() {
 }
 
 void InteractionManager::startMicrophone() {
+    printf("StartStreamigMicrophoneData() 9\n\n");
     m_micWrapper->startStreamingMicrophoneData();
 }
 
