@@ -681,8 +681,10 @@ SampleApplication::~SampleApplication() {
         }
         shutdownable->shutdown();
     }
+    //m_speakMediaPlayer->doShutdown();
 
     m_sdkInit.reset();
+    printf("\n\n\nSampleApplication: EXIT!!!!");     
 }
 
 bool SampleApplication::createMediaPlayersForAdapters(
@@ -1038,8 +1040,8 @@ bool SampleApplication::initialize(
      * Check to see if displayCards is supported on the device. The default is supported unless specified otherwise in
      * the configuration.
      */
-    bool displayCardsSupported;
-    config[SAMPLE_APP_CONFIG_KEY].getBool(DISPLAY_CARD_KEY, &displayCardsSupported, true);
+    bool displayCardsSupported = false;
+    //config[SAMPLE_APP_CONFIG_KEY].getBool(DISPLAY_CARD_KEY, &displayCardsSupported, true);
 
     /*
      * Creating the InternetConnectionMonitor that will notify observers of internet connection status changes.

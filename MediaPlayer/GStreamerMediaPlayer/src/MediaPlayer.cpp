@@ -172,7 +172,8 @@ std::shared_ptr<MediaPlayer> MediaPlayer::create(
     bool enableEqualizer,
     std::string name,
     bool enableLiveMode) {
-    ACSDK_DEBUG9(LX("createCalled").d("name", name));
+    //printf("\n\n\nCreating Mediaplayer %s!!!\n\n\n", *name);
+    ACSDK_DEBUG1(LX("createCalled").d("name", name));
     std::shared_ptr<MediaPlayer> mediaPlayer(
         new MediaPlayer(contentFetcherFactory, enableEqualizer, name, enableLiveMode));
     if (mediaPlayer->init()) {
@@ -183,7 +184,9 @@ std::shared_ptr<MediaPlayer> MediaPlayer::create(
 };
 
 MediaPlayer::~MediaPlayer() {
-    ACSDK_DEBUG9(LX(__func__).d("name", RequiresShutdown::name()));
+    //printf("\n\n\nDestroying Mediaplayer %s!!!\n\n\n", *RequiresShutdown::name());
+	
+    ACSDK_DEBUG1(LX(__func__).d("name", RequiresShutdown::name()));
     cleanUpSource();
     g_main_loop_quit(m_mainLoop);
     if (m_mainLoopThread.joinable()) {
@@ -202,6 +205,7 @@ MediaPlayer::~MediaPlayer() {
         m_fileStream = nullptr;
         ACSDK_LOG(alexaClientSDK::avsCommon::utils::logger::Level::INFO, alexaClientSDK::avsCommon::utils::logger::LogEntry("FileOutput", "fileClosed"));
     }
+    doShutdown();
 }
 
 MediaPlayer::SourceId MediaPlayer::setSource(

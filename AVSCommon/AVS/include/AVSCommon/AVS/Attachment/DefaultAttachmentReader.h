@@ -161,6 +161,8 @@ std::size_t DefaultAttachmentReader<SDSType>::read(
 
     const auto wordSize = m_reader->getWordSize();
     if (numBytes < wordSize) {
+	printf("\n\n\nDefaultAttachmentReader read: numBytes %d, wordSize %d\n\n\n", numBytes, wordSize);
+	//assert(false);
         ACSDK_ERROR(
             utils::logger::LogEntry(TAG, "readFailed").d("reason", "bytes requested smaller than SDS word size"));
         *readStatus = ReadStatus::ERROR_BYTES_LESS_THAN_WORD_SIZE;

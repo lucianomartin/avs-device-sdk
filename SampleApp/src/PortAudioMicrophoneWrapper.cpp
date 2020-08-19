@@ -82,9 +82,16 @@ PortAudioMicrophoneWrapper::~PortAudioMicrophoneWrapper() {
     Pa_StopStream(m_paStream);
     Pa_CloseStream(m_paStream);
     Pa_Terminate();
+    printf("\n\nDELETE PortAudioMicrophoneWrapper\n\n");
+    if (m_fileStream) {
+        delete m_fileStream;
+        m_fileStream = nullptr;
+        ACSDK_LOG(alexaClientSDK::avsCommon::utils::logger::Level::INFO, alexaClientSDK::avsCommon::utils::logger::LogEntry("FileInput", "fileClosed"));
+    }
+
     if (m_readerThread) {
         m_threadPromise->set_value();
-        m_readerThread->join();
+        m_readerThread->join(); 
         delete m_readerThread;
         delete m_threadFuture;
         delete m_threadPromise;
@@ -92,11 +99,6 @@ PortAudioMicrophoneWrapper::~PortAudioMicrophoneWrapper() {
         m_threadFuture = nullptr;
         m_threadPromise = nullptr;
         ACSDK_LOG(alexaClientSDK::avsCommon::utils::logger::Level::INFO, alexaClientSDK::avsCommon::utils::logger::LogEntry("FileInput", "threadDestroyed"));
-    }
-    if (m_fileStream) {
-        delete m_fileStream;
-        m_fileStream = nullptr;
-        ACSDK_LOG(alexaClientSDK::avsCommon::utils::logger::Level::INFO, alexaClientSDK::avsCommon::utils::logger::LogEntry("FileInput", "fileClosed"));
     }
 }
 
@@ -170,8 +172,11 @@ void PortAudioMicrophoneWrapper::ReaderThread(PortAudioMicrophoneWrapper *wrappe
     ACSDK_LOG(alexaClientSDK::avsCommon::utils::logger::Level::INFO, alexaClientSDK::avsCommon::utils::logger::LogEntry("FileInput", "threadAlive"));
     signed short block[128];
     const unsigned period = sizeof(block) / 2 * 1000 / (unsigned)SAMPLE_RATE;
-    while (wrapper->m_threadFuture->wait_for(std::chrono::milliseconds(period)) == std::future_status::timeout) {
+    while (/*wrapper->m_fileStream != NULL && */wrapper->m_threadFuture->wait_for(std::chrono::milliseconds(period)) == std::future_status::timeout) {
         wrapper->m_fileStream->read((char*)block, sizeof(block));
+	if (!wrapper) {
+	    return;
+	} 
 	//printf("blocks: %x %x %x %x\n", block[0], block[1], block[2], block[3]);
         if (wrapper->m_fileStream->fail() || wrapper->m_fileStream->eof()) {
             if (!wrapper->m_eofReached) {

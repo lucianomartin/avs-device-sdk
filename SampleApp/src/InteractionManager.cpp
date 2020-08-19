@@ -105,7 +105,7 @@ InteractionManager::InteractionManager(
         m_isHoldOccurring{false},
         m_isTapOccurring{false},
         m_isCallConnected{false},
-        m_isMicOn{true},
+        m_isMicOn{false},
 #ifdef ENABLE_ENDPOINT_CONTROLLERS
         m_friendlyNameToggle{true},
 #endif
@@ -122,15 +122,16 @@ void InteractionManager::begin() {
             m_userInterface->printAudioInjectionHeader();
         }
         m_userInterface->printHelpScreen();
-	//m_isMicOn = true;
+	m_isMicOn = true;
 	if (m_wakeWordAudioProvider) {
 	  //while (m_userInterface->getAuthState() != AuthObserverInterface::State::REFRESHED) {
 	  while (m_userInterface->getConnectionStatus() != avsCommon::sdkInterfaces::ConnectionStatusObserverInterface::Status::CONNECTED) {
-	    usleep(50000);
+	    //usleep(500000);
+	    sleep(1);
     	  }
 	  printf("%d", (int) m_userInterface->getAuthState());
 	  printf("StartStreamigMicrophoneData() 1\n\n\n\n\n");
-	  sleep(2);
+	  sleep(5);
           m_micWrapper->startStreamingMicrophoneData();
         }
 
